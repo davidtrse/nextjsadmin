@@ -1,70 +1,96 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Form, Input, Button, Checkbox, message } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import { handleLogin } from '@/services/api'
 import { useRouter } from 'next/router';
+import { ROUTER } from '@/constants';
+import { useAuthStore } from '@/store/authstorage';
 
-const handleLogin = async ({ email, password }: { email: string; password: string }) => {
-    try {
-        const res = await axios.post('http://159.223.59.66:4003/users/login', { email, password })
-
-        if (res.status === 200) {
-            return res.data;
-        }
-    } catch (e: any) {
-        alert(e.message);
-        return null;
-    }
-
-};
-
-const LoginPage: React.FC = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+// tuanpha.it@gmail.com
+// admin@123
+const LoginPage = () => {
+    const router = useRouter();
+    const { token,  setToken } = useAuthStore((state) => state);
     const [loading, setLoading] = useState(false);
-    const { push } = useRouter();
-    const handlerSubmit = async (event: any) => {
+    const onFinish = async (values: { email: string, password: string }) => {
         setLoading(true)
-        event.preventDefault();
-        const res = await handleLogin({ email, password });
+        alert('Received values of form: ' + JSON.stringify(values));
+        const res = await handleLogin(values);
+
         if (res) {
-            push('/')
+            setToken(res?.token, {email: values.email});
+            message.success("Login successful")
+            router.push(ROUTER.DASHBOARD);
         }
+
         setLoading(false)
     };
-    return (
-        <div className="h-screen w-screen bg-black flex items-center justify-center relative bg-[url('/bg-login.png')] bg-cover bg-bottom" >
-            <div className='text-white w-[538px] h-[421px] z-40 rounded-3xl bg-[#2B2B2B] py-9 px-14'>
-                <h1 className='text-[#2ADDC8] text-5xl text-center'>Đăng nhập</h1>
-                <p className='text-center mt-3'>Đăng nhập để quản lý website</p>
-                <form onSubmit={handlerSubmit} className='flex flex-col mt-4'>
-                    <label htmlFor="">Email:</label>
-                    <input
-                        id="email"
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className='bg-[#404040] rounded-xl h-12 mt-2 px-3'
-                    >
-                    </input>
-                    <label htmlFor="password" className='mt-6'>Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className='bg-[#404040] rounded-xl h-12 mt-2 px-3'
-                    ></input>
 
-                    <button
-                        type="submit"
-                        disabled={loading}
-                        className="rounded-lg bg-gradient-to-b from-[#2ACCDB] to-[#2ACCDD] w-[138px] h-[46px] mx-auto mt-2"
-                    >
-                        {loading ? "Loading..." : 'Đăng nhập'}
-                    </button>
-                </form>
-            </div>
+    useEffect(() => {
+        if (token) {
+            router.push(ROUTER.DASHBOARD);
+        }
+    }, [])
+
+
+    return (
+        <div className='container mx-auto h-screen center'>
+            <Form
+                name="normal_login"
+                className="w-[300px] bg-white rounded-lg shadow-md p-6"
+                initialValues={{
+                    remember: true,
+                }}
+                onFinish={onFinish}
+            >
+                <Form.Item
+                    name="email"
+                    rules={[
+                        {
+                            required: true,
+                            type: 'email',
+                            message: 'Please input your Email!',
+                        },
+                    ]}
+                >
+                    <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
+                </Form.Item>
+                <Form.Item
+                    name="password"
+                    rules={[
+                        {
+                            required: true,
+                            message: 'Please input your Password!',
+                        },
+                    ]}
+                >
+                    <Input
+                        prefix={<LockOutlined className="site-form-item-icon" />}
+                        type="password"
+                        placeholder="Password"
+                    />
+                </Form.Item>
+                <Form.Item>
+                    <Form.Item name="remember" valuePropName="checked" noStyle>
+                        <Checkbox>Remember me</Checkbox>
+                    </Form.Item>
+
+                    <a className="login-form-forgot" href="">
+                        Forgot password
+                    </a>
+                </Form.Item>
+
+                <Form.Item className='col gap-4 center text-center'>
+                    <Button loading={loading} type="primary" htmlType="submit">
+                        Log in
+                    </Button>
+                    <div className='mt-6'>
+                        Or <a href="">register now!</a>
+                    </div>
+                </Form.Item>
+            </Form>
         </div>
     );
-};
 
-export default LoginPage;
+};
+export default LoginPage

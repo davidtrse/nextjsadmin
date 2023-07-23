@@ -1,6 +1,8 @@
 import '@/styles/globals.css'
+import '@/styles/reset.css'
 import type { AppProps } from 'next/app'
 import { Alumni_Sans, Quicksand } from '@next/font/google';
+import MainLayout from '@/components/common/mainlayout';
 
 const quicksand = Quicksand({
   subsets: ['vietnamese', 'latin'],
@@ -17,7 +19,7 @@ const alumni = Alumni_Sans({
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <MainLayout>
       <Component {...pageProps} />
 
       <style jsx global>{`
@@ -27,6 +29,6 @@ export default function App({ Component, pageProps }: AppProps) {
         }
       `}
       </style>
-    </>
+    </MainLayout>
   );
 }

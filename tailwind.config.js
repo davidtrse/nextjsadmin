@@ -15,4 +15,9 @@ module.exports = {
     },
   },
   plugins: [],
+  corePlugins: {
+    // because reset.css of ANT is conflict with tailwin
+    // Remove Tailwind CSS's preflight style so it can use the antd's preflight instead (reset.css).
+    preflight: false,
+  },
 }
