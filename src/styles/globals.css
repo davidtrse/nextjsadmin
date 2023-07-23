@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+	padding: 0;
+	margin: 0;
+	font-weight: 500;
+	font-family: var(--quicksand-font);
+}
+h1 {
+	font-family: var(--alumniSans-font);
+}
