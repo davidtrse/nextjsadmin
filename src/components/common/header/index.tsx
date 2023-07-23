@@ -13,7 +13,6 @@ const headerStyle: React.CSSProperties = {
     backgroundColor: '#7dbcea',
   };
 
-
 const Header : React.FC = ()=> {
     const { profile } = useAuthStore((state) => state);
    
