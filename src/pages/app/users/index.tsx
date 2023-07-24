@@ -1,9 +1,10 @@
 import MainLayout from '@/components/common/MainLayout';
+import { NextPageWithLayout } from '../../_app';
 import React, { useEffect, useState } from 'react';
-import { NextPageWithLayout } from '../_app';
 import { Breadcrumb, Pagination, Table, TableProps } from 'antd';
 import Link from 'next/link'
 import { ColumnsType } from 'antd/es/table';
+import {ROUTER} from '@/constants';
 
 interface DataType {
     key: React.Key;
@@ -17,7 +18,7 @@ const items = [
         title: <Link href="/">Home</Link>,
     },
     {
-        title: 'Dashboard'
+        title: <Link href={ROUTER.USERS}>Users</Link>,
     },
 
 ]
@@ -109,9 +110,7 @@ const columns: ColumnsType<DataType> = [
     },
 ];
 
-
-const DashboardPage: NextPageWithLayout<{ data: any }> = (props) => {
-
+const ListUsersPage: NextPageWithLayout<{data: any}> = (props) => {
     const [list, setList] = useState([])
     const [params, setPrams] = useState({
         limit: 10,
@@ -143,8 +142,9 @@ const DashboardPage: NextPageWithLayout<{ data: any }> = (props) => {
         console.log('====================================');
         setPrams(e)
     }
+
     return <div>
-        <Breadcrumb
+         <Breadcrumb
             items={items}
         />
         <div className="p-4"><Table onChange={onChange} columns={columns} dataSource={data} pagination={false} />
@@ -160,8 +160,8 @@ const DashboardPage: NextPageWithLayout<{ data: any }> = (props) => {
     </div>;
 };
 
-DashboardPage.getLayout = MainLayout;
+ListUsersPage.getLayout = MainLayout;
 
 // get api 
 // call apip => data => return { props: { data }}
-export default DashboardPage;
+export default ListUsersPage;
