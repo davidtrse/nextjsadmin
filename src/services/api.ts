@@ -1,26 +1,68 @@
-import axios from 'axios';
 
-interface ILoginPayload {
-    email: string;
-    password: string;
-}
+import apisauce, { ApiResponse } from 'apisauce';
+import { IProduct, IUser } from './api.type';
+import { Filter } from './loopback.type';
 
-const handleLogin = async (payload: ILoginPayload) => {
-    const { email, password } = payload;
+export const isDev = process.env.NODE_ENV === 'development';
 
-    try {
-        const res = await axios.post('http://159.223.59.66:4003/users/login', { email, password })
+export const baseURL = 'http://159.223.59.66:4003';
 
-        if (res.status === 200) {
-            return res.data;
-        }
-    } catch (e: any) {
-        alert(e.message);
-        return null;
-    }
-
+export const defaultApiSauceConfig = (headers?: any) => {
+	return {
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+			...headers,
+		},
+		timeout: 10000,
+	};
 };
 
-export {
-    handleLogin
+interface ErrorType {
+	error: {
+		message: string;
+		statusCode: number
+	}
+}
+const createServiceApi = () => {
+	const api = apisauce.create({
+		...defaultApiSauceConfig(),
+		baseURL: baseURL,
+	});
+
+	const getUserMe = async () => api.get<IUser>('/users/me');
+	const login = async ({ email, password }: { email: string, password: string }) => api.post<{ token: string }>('/users/login', { email, password });
+	const register = async (data: IUser) => api.post('/users/register', data);
+
+	const getProducts = async (filter: Filter) => api.get<{data: IProduct[], count: number}>('/products', {filter});
+	const createProduct = async (data: IProduct) => api.post<IProduct, ErrorType>('/products', data);
+	const getCategories = async () => api.get<{data: any[], count: number}>('/categories');
+
+	return {
+		api,
+		getUserMe,
+		login,
+		register,
+		getProducts,
+		createProduct,
+		getCategories
+	}
+}
+
+
+export const ServiceApi = createServiceApi();
+
+export const setApiAuthorization = (token?: string) => {
+	if (!token) {
+		ServiceApi.api.deleteHeader('authorization');
+		return
+	}
+	ServiceApi.api.setHeaders({
+		authorization: 'Bearer ' + token,
+	});
+};
+
+
+export const isSuccess = <T = any>(res: ApiResponse<T, ErrorType>) => {
+	return res.ok && (res.status === 200 || res.status === 204);
 };

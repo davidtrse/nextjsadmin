@@ -18,11 +18,11 @@ export const MENU: MenuProps['items'] = [
                 key: ROUTER.USERS,
                 icon: <UnorderedListOutlined />,
             },
-            {
-                label: 'Add',
-                key: ROUTER.ADD_USER,
-                icon: <UserAddOutlined />,
-            }
         ]
+    },
+    {
+        label: 'Products',
+        key: ROUTER.PRODUCTS,
+        icon: <UserOutlined />,
     }
 ]

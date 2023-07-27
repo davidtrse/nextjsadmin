@@ -5,15 +5,15 @@ type TProfile={
 }
 
 type TAuthStore = {
-    token: string | null;
+    token: string | null | undefined;
     profile: TProfile | null;
-    setToken: (token: string | null, newProfile: TProfile|null) => void; // void is any function
+    setToken: (token: string | null | undefined, newProfile: TProfile|null) => void; // void is any function
 }
 
 const useAuthStore = create<TAuthStore>((set) => ({
     token: null,
     profile: null,
-    setToken: (newToken: string|null, newProfile: TProfile|null) => 
+    setToken: (newToken: string | null | undefined, newProfile: TProfile|null) => 
         set(() => ({ token: newToken, profile: newProfile })),
 }))
 
