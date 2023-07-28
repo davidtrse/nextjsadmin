@@ -1,23 +1,49 @@
-import React from 'react';
-import { Layout, Space } from 'antd';
+import React, { useCallback } from 'react';
+import { Button, Layout, Modal, Space } from 'antd';
 import { useAuthStore } from '@/store/authstorage';
+import { useRouter } from 'next/router';
+import { ROUTER } from '@/constants';
+import { ExclamationCircleFilled } from '@ant-design/icons';
 
 const { Header: AntHeader } = Layout
 
-const headerStyle: React.CSSProperties = {
-  textAlign: 'center',
-  color: '#fff',
-  height: 64,
-  paddingInline: 50,
-  lineHeight: '64px',
-  backgroundColor: '#7dbcea',
-};
+
+const { confirm } = Modal;
 
 const Header: React.FC = () => {
-  const { profile } = useAuthStore((state) => state);
+  const { profile, setToken } = useAuthStore((state) => state);
+  const {push} = useRouter()
+  const onLogout = useCallback(() => {
+    confirm({
+      title: 'Do you Want to logout now?',
+      icon: <ExclamationCircleFilled />,
+      onOk() {
+        setToken(null, null);
+        push(ROUTER.LOGIN)
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+    });
+
+  
+  }, [])
 
   return (
-    <AntHeader style={headerStyle}> header {profile?.email} </AntHeader>
+    <AntHeader className='h-[64px] bg-[#7dbcea] row justify-between '>
+      <div>
+
+      </div>
+      <div className='row gap-7'>
+        <p>
+          {profile?.email}
+        </p>
+        <Button type='primary' onClick={onLogout}>
+          Logout
+        </Button>
+      </div>
+
+    </AntHeader>
   )
 
 };

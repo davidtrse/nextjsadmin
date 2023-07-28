@@ -1,11 +1,15 @@
-import React from 'react';
-import { Layout, Space } from 'antd';
+import React, { useEffect, useLayoutEffect } from 'react';
+import { Layout, Space, message } from 'antd';
 import { useAuthStore } from '@/store/authstorage';
 import dynamic from 'next/dynamic'
 import Menu from '@/components/common/Menu';
+import { ServiceApi, setApiAuthorization } from '@/services/api';
+import { ApiResponse } from 'apisauce';
+import { useRouter } from 'next/router';
+import { ROUTER } from '@/constants';
 
 const DynamicHeader = dynamic(() => import('@/components/common/Header'), {
-    loading: () => <div className='h-64px w-full'>Loading...</div>,
+    loading: () => <div className='w-full h-64px'>Loading...</div>,
     ssr: false,
 })
 
@@ -27,8 +31,27 @@ const footerStyle: React.CSSProperties = {
 };
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
+    const { push } = useRouter();
+    const token = useAuthStore(state => state.token)
+
+    const naviMonitor = (response: ApiResponse<any>) => {
+        // console.log('hey!  listen! ', response);
+        if(response.status === 401){
+            message.error("Permission denied");
+            push(ROUTER.LOGIN)
+        }
+    }
+    
+    useLayoutEffect(() => {
+        ServiceApi.api.addMonitor(naviMonitor)
+
+        if(token){
+            setApiAuthorization(token)
+        }
+    }, [])
+    
     return <div>
-        <Space direction="vertical" className='min-h-screen w-screen' size={[0, 48]}>
+        <Space direction="vertical" className='w-screen min-h-screen' size={[0, 48]}>
             <Layout className='min-h-screen'>
                 <Sider style={siderStyle}>
                     <div className='h-[64px] bg-gray-300 center'>

@@ -10,19 +10,14 @@ export const MENU: MenuProps['items'] = [
     },
     {
         label: 'Users',
-        key: 'Users',
+        key: ROUTER.USERS,
         icon: <UserOutlined />,
-        children: [
-            {
-                label: 'List',
-                key: ROUTER.USERS,
-                icon: <UnorderedListOutlined />,
-            },
-        ]
+        // children: [
+        //     {
+        //         label: 'List',
+        //         key: ROUTER.USERS,
+        //         icon: <UnorderedListOutlined />,
+        //     },
+        // ]
     },
-    {
-        label: 'Products',
-        key: ROUTER.PRODUCTS,
-        icon: <UserOutlined />,
-    }
 ]

@@ -31,7 +31,7 @@ const LoginPage = () => {
 	}, []);
 
 	return (
-		<div className="container mx-auto h-screen center">
+		<div className="container h-screen mx-auto center">
 			<Form
 				name="normal_login"
 				className="w-[300px] bg-white rounded-lg shadow-md p-6"
@@ -84,7 +84,7 @@ const LoginPage = () => {
 					</a>
 				</Form.Item>
 
-				<Form.Item className="col gap-4 center text-center">
+				<Form.Item className="gap-4 text-center col center">
 					<Button loading={loading} type="primary" htmlType="submit">
 						Log in
 					</Button>

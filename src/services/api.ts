@@ -5,7 +5,7 @@ import { Filter } from './loopback.type';
 
 export const isDev = process.env.NODE_ENV === 'development';
 
-export const baseURL = 'http://159.223.59.66:4003';
+export const baseURL = 'http://159.223.61.134:4002';
 
 export const defaultApiSauceConfig = (headers?: any) => {
 	return {
@@ -34,6 +34,13 @@ const createServiceApi = () => {
 	const login = async ({ email, password }: { email: string, password: string }) => api.post<{ token: string }>('/users/login', { email, password });
 	const register = async (data: IUser) => api.post('/users/register', data);
 
+	// User
+	const getUsers = async (filter: Filter) => api.get<{data: IUser[], total: number}>('/users', {filter});
+	const createUser = async (data: IUser) => api.post<IUser, ErrorType>('/users', data);
+	const updateUser = async (id: number, data: IUser) => api.patch('/admin/users/'+ id, data);
+	const getUserById = async (id: number) => api.get<IUser>('/users/'+ id);
+	const deleteUser = async (id: number) => api.delete('/admin/users/'+id);
+
 	const getProducts = async (filter: Filter) => api.get<{data: IProduct[], count: number}>('/products', {filter});
 	const createProduct = async (data: IProduct) => api.post<IProduct, ErrorType>('/products', data);
 	const getCategories = async () => api.get<{data: any[], count: number}>('/categories');
@@ -45,7 +52,12 @@ const createServiceApi = () => {
 		register,
 		getProducts,
 		createProduct,
-		getCategories
+		getCategories,
+		getUsers,
+		createUser,
+		updateUser,
+		getUserById,
+		deleteUser
 	}
 }
 
