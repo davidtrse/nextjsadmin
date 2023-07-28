@@ -11,40 +11,40 @@ const { Header: AntHeader } = Layout
 const { confirm } = Modal;
 
 const Header: React.FC = () => {
-  const { profile, setToken } = useAuthStore((state) => state);
-  const {push} = useRouter()
-  const onLogout = useCallback(() => {
-    confirm({
-      title: 'Do you Want to logout now?',
-      icon: <ExclamationCircleFilled />,
-      onOk() {
-        setToken(null, null);
-        push(ROUTER.LOGIN)
-      },
-      onCancel() {
-        console.log('Cancel');
-      },
-    });
+    const { profile, setToken } = useAuthStore((state) => state);
+    const { push } = useRouter()
+    const onLogout = useCallback(() => {
+        confirm({
+            title: 'Do you Want to logout now?',
+            icon: <ExclamationCircleFilled />,
+            onOk() {
+                setToken(null, null);
+                push(ROUTER.LOGIN)
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
 
-  
-  }, [])
 
-  return (
-    <AntHeader className='h-[64px] bg-[#7dbcea] row justify-between '>
-      <div>
+    }, [])
 
-      </div>
-      <div className='row gap-7'>
-        <p>
-          {profile?.email}
-        </p>
-        <Button type='primary' onClick={onLogout}>
-          Logout
-        </Button>
-      </div>
+    return (
+        <AntHeader className='h-[64px] bg-[#7dbcea] row justify-between '>
+            <div>
 
-    </AntHeader>
-  )
+            </div>
+            <div className='row gap-7'>
+                <p>
+                    {profile?.email}
+                </p>
+                <Button type='primary' onClick={onLogout}>
+                    Logout
+                </Button>
+            </div>
+
+        </AntHeader>
+    )
 
 };
 

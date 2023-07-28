@@ -4,16 +4,16 @@ export interface IUser {
 	firstName: string;
 	lastName: string;
 	password?: string;
-      "roles"?: string,
-      "slug"?: string,
-      "gender"?: string,
-      "birthday"?: string,
-      "phone"?: string,
-      "code"?: string,
-      "address"?: string,
-      "lockedAt"?: string,
-      "lockMessage"?: string,
-      "createdAt"?: string,
+	"roles"?: string,
+	"slug"?: string,
+	"gender"?: string,
+	"birthday"?: string,
+	"phone"?: string,
+	"code"?: string,
+	"address"?: string,
+	"lockedAt"?: string,
+	"lockMessage"?: string,
+	"createdAt"?: string,
 }
 
 export interface IProduct {

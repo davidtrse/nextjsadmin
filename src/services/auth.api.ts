@@ -2,7 +2,7 @@ import { ServiceApi, isSuccess,setApiAuthorization } from "./api";
 import { message } from 'antd';
 
 export const login = async(values: { email: string, password: string}) => {
-    const res = await ServiceApi.login(values);
+    const res : any= await ServiceApi.login(values);
 
         if (isSuccess(res)) {
             message.success("Login successful");

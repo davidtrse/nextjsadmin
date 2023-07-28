@@ -5,10 +5,10 @@ import { Breadcrumb, Layout, Menu as MenuAntd, theme } from 'antd';
 import { MENU } from './Menu.config';
 
 import { useRouter } from 'next/router';
-import {ROUTER} from '@/constants'
+import { ROUTER } from '@/constants'
 
 const Menu: React.FC = () => {
-  const {push, pathname} = useRouter()
+    const { push, pathname } = useRouter()
 
     const [current, setCurrent] = useState(ROUTER.DASHBOARD);
 
